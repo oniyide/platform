@@ -1,15 +1,16 @@
 package org.hobbit.controller.kubernetes;
 
+import io.kubernetes.client.ApiClient;
+import io.kubernetes.client.ApiException;
+import io.kubernetes.client.Configuration;
+import io.kubernetes.client.apis.CoreV1Api;
 import io.kubernetes.client.informer.SharedIndexInformer;
 import io.kubernetes.client.informer.SharedInformerFactory;
 import io.kubernetes.client.informer.cache.Lister;
-import io.kubernetes.client.openapi.ApiClient;
-import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.Configuration;
-import io.kubernetes.client.openapi.apis.CoreV1Api;
-import io.kubernetes.client.openapi.models.V1Node;
-import io.kubernetes.client.openapi.models.V1NodeList;
-import io.kubernetes.client.openapi.models.V1PodList;
+import io.kubernetes.client.models.V1Node;
+import io.kubernetes.client.models.V1NodeList;
+import io.kubernetes.client.models.V1PersistentVolumeClaimList;
+import io.kubernetes.client.models.V1PodList;
 import io.kubernetes.client.util.CallGeneratorParams;
 import io.kubernetes.client.util.ClientBuilder;
 import org.hobbit.controller.docker.ClusterManagerImpl;
@@ -31,6 +32,8 @@ public class K8sClusterManagerImpl implements K8sClusterManager {
 
     private String K8S_PODS_NUMBER = null;
 
+    private String NAMESPACE = System.getenv("K8S_NAMESPACE");
+
     public K8sClusterManagerImpl() throws IOException, ApiException {
         k8sclient = ClientBuilder.cluster().build();
         Configuration.setDefaultApiClient(k8sclient);
@@ -38,22 +41,32 @@ public class K8sClusterManagerImpl implements K8sClusterManager {
 
         K8S_PODS_NUMBER = System.getenv("K8S_PODS_NUMBER");
 
+        if (NAMESPACE == null || "".equals(NAMESPACE)) {
+            NAMESPACE = "default";
+        }
+
         factory = new SharedInformerFactory();
 
         nodeInformer =
             factory.sharedIndexInformerFor(
                 (CallGeneratorParams params) -> {
-                    return api.listNodeCall(
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        params.resourceVersion,
-                        params.timeoutSeconds,
-                        params.watch,
-                        null);
+                    try {
+                        return api.listNodeCall(
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            params.resourceVersion,
+                            params.timeoutSeconds,
+                            params.watch,
+                            null,
+                            null);
+                    } catch (ApiException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
                 },
                 V1Node.class,
                 V1NodeList.class);
@@ -66,7 +79,8 @@ public class K8sClusterManagerImpl implements K8sClusterManager {
     @Override
     public V1PodList getPodsInfo() throws ApiException {
 
-        V1PodList list = api.listPodForAllNamespaces(null, null, null, null, null, null, null, null, null);
+        V1PodList list = api.listPodForAllNamespaces(null, null, null, null,
+                                                    null, null, null, null, null);
         // k8sclient = ClientBuilder.kubeconfig(KubeConfig.loadKubeConfig(new FileReader(kubeConfigPath))).build();
         // Parameters are currently commented because I do not know the right values yet
 
@@ -76,7 +90,6 @@ public class K8sClusterManagerImpl implements K8sClusterManager {
     @Override
     public long getNumberOfNodes() {
         // Node informer
-
 
         Lister<V1Node> nodeLister = new Lister<V1Node>(nodeInformer.getIndexer());
 
@@ -101,5 +114,13 @@ public class K8sClusterManagerImpl implements K8sClusterManager {
         }
         LOGGER.debug("Cluster is not healthy ({}/{})",numberOfPods, expectedNumberOfPods);
         return false;
+    }
+
+    @Override
+    public V1PersistentVolumeClaimList getPVCs(String namespace) throws ApiException {
+
+        V1PersistentVolumeClaimList list = api.listNamespacedPersistentVolumeClaim(namespace, null, null, null, null, null, null, null, null, null);
+
+        return list;
     }
 }

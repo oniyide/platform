@@ -13,7 +13,7 @@ public class K8sUtility {
         .withMasterUrl(K8sUtility.MASTER_URL)
         .build();
 
-    public static KubernetesClient kubeClient =new DefaultKubernetesClient(kubeConfig);
+    public static final KubernetesClient kubeClient =new DefaultKubernetesClient(kubeConfig);
 
     public static String defaultNamespace(String namespace){
         if (namespace == null)
