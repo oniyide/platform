@@ -1,4 +1,4 @@
 configMapGenerator:
 - name: redis-conf
   files:
-  - redis.conf
+  - redis-db/redis.conf
