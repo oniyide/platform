@@ -1,4 +1,6 @@
 configMapGenerator:
 - name: redis-conf
   files:
-  - redis-db/redis.conf
+    - config/redis-db/redis.conf
+  resources:
+    - resource/kompose/redis.yaml
