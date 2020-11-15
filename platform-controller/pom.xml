@@ -65,6 +65,12 @@
             <artifactId>docker-client</artifactId>
             <version>8.11.2</version>
         </dependency>
+        <!--Kubernetes Docker Client-->
+        <dependency>
+            <groupId>io.fabric8</groupId>
+            <artifactId>kubernetes-client</artifactId>
+            <version>4.10.2</version>
+        </dependency>
         <!-- JSON lib -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
