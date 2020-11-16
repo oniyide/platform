@@ -145,3 +145,7 @@ start-dev-platform:
 
 start-elk-platform:
 	kubectl apply -f ./resource/kompose-elk
+
+start-redis-service:
+	kubectl apply -k .
+
