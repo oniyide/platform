@@ -31,4 +31,3 @@ spec:
               value: "HobbitPlatform"
             - name: SPARQL_ENDPOINT_PASSWORD
               value: "Password"
-

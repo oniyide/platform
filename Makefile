@@ -148,4 +148,3 @@ start-elk-platform:
 
 start-redis-service:
 	kubectl apply -k .
-
