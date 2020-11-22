@@ -23,18 +23,21 @@ spec:
           image: hobbitproject/virtuoso_opensource:v07.20.3217
           imagePullPolicy: IfNotPresent
           securityContext:
-            privileged: true
-            allowPrivilegeEscalation: true
+            allowPrivilegeEscalation: false
+            runAsUser: 0
           ports:
             - name: http
               containerPort: 8890
           volumeMounts:
-            - name: db
-              mountPath: "/opt/virtuoso-opensource/database"
+            - mountPath: /config/db
+              name: vos-server
       volumes:
-        - name: db
-          hostPath:
-            path: /config/db
+        - name: vos-server
+          configMap:
+            name: vos-server
+            items:
+              - key: vos-config
+                path: virtuoso.ini
 
 ---
 

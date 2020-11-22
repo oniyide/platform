@@ -2,5 +2,9 @@ configMapGenerator:
 - name: redis-server
   files:
     - config/redis-db/redis-config
+- name: vos-server
+  files:
+    - config/db/vos-config
 resources:
 - resource/kompose/redis.yaml
+- resource/kompose/vos.yaml
