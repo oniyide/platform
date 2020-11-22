@@ -36,7 +36,7 @@ spec:
           configMap:
             name: vos-server
             items:
-              - key: vos-config
+              - key: virtuoso-ini
                 path: virtuoso.ini
 
 ---
