@@ -6,11 +6,5 @@ configMapGenerator:
   files:
     - config/db/virtuoso-ini
 resources:
-- resource/kompose/rabbit.yaml  
-- resource/kompose/redis.yaml
-- resource/kompose/vos.yaml
-- resource/kompose/storage-service.yaml
-- resource/kompose/platform-controller.yaml
-- resource/kompose/keycloak.yaml
-- resource/kompose/gui.yaml
-- resource/kompose/analysis.yaml  
+- resource/redis.yaml
+- resource/vos.yaml
