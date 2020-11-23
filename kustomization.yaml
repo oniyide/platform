@@ -8,3 +8,5 @@ configMapGenerator:
 resources:
 - resource/redis.yaml
 - resource/vos.yaml
+- resource/keycloak.yaml
+- resource/rabbit.yaml
