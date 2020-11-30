@@ -4,6 +4,7 @@ metadata:
   name: keycloak
   labels:
     app: keycloak
+    io.kompose.network/hobbit: "true"
   annotations:
     "cni.projectcalico.org/ipv4pools": "[\"hobbit\"]"
 spec:
@@ -15,6 +16,7 @@ spec:
     metadata:
       labels:
         app: keycloak
+        io.kompose.network/hobbit: "true"
       annotations:
         "cni.projectcalico.org/ipv4pools": "[\"hobbit\"]"
     spec:

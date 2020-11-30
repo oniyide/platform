@@ -4,6 +4,7 @@ metadata:
   name: vos
   labels:
     app: vos
+    io.kompose.network/hobbit-core: hobbit-core
   annotations:
     "cni.projectcalico.org/ipv4pools": "[\"hobbit-core\"]"
 spec:
@@ -15,6 +16,7 @@ spec:
     metadata:
       labels:
         app: vos
+        io.kompose.network/hobbit-core: hobbit-core
       annotations:
         "cni.projectcalico.org/ipv4pools": "[\"hobbit-core\"]"
     spec:
