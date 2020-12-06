@@ -1,54 +1,63 @@
 package org.hobbit.controller.kubernetes;
 
-import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.models.V1PodList;
+import io.fabric8.kubernetes.api.model.NodeListBuilder;
+import io.fabric8.kubernetes.client.server.mock.KubernetesServer;
+import org.hobbit.controller.orchestration.objects.ClusterInfo;
 import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
+import org.junit.Rule;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 
-public class K8sClusterManagerImplTest {
+class K8sClusterManagerImplTest {
 
-    K8sClusterManagerImpl clusterManager;
+    @Rule
+    KubernetesServer server = new KubernetesServer();
+
+    @Rule
+    K8sClusterManagerImpl clusterManager = new K8sClusterManagerImpl();
 
     @Before
-    public void setUp() {
-        try {
-            System.out.print("Into the Setup");
-            //ApiClient k8sclient = ClientBuilder.standard().build();
-            //Configuration.setDefaultApiClient(k8sclient);
-            clusterManager = new K8sClusterManagerImpl();
-        } catch (IOException | ApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void testGetPodsInfo() {
-        try {
-            System.out.print("Into the testGetPodsInfo");
-            final V1PodList info = clusterManager.getPodsInfo();
-            assertNotNull(info);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void setUp() throws Exception {
+        server.before();
+        server.expect().withPath("/api/v1/nodes").andReturn(200, new NodeListBuilder().addNewItem().and().build()).once();
+        server.expect().withPath("/api/v1/nodes").andReturn(200, new NodeListBuilder().addNewItem().and().build()).once();
+        server.expect().withPath("/api/v1/nodes").andReturn(200, new NodeListBuilder().addNewItem().and().build()).once();
 
     }
 
+
     @Test
-    public void testGetNumberOfNodes() {
-        System.out.print("Into the testGetNumberOfNodes");
+    void getClusterInfo() {
+        final ClusterInfo info = clusterManager.getClusterInfo();
+        assertNotNull(info);
+    }
+
+    @Test
+    void getNumberOfNodes() {
         long numberOfNodes = clusterManager.getNumberOfNodes();
-        assertEquals(1, numberOfNodes);
+        assertEquals(3, numberOfNodes);
     }
 
     @Test
-    public void testIsClusterHealthy() {
-        System.out.print("Into the testIsClusterHealthy");
+    void testGetNumberOfNodes() {
+        long numberOfNodes = clusterManager.getNumberOfNodes("org.hobbit.workergroup=system");
+        assertEquals(0, numberOfNodes);
+    }
+
+    @Test
+    void isClusterHealthy() {
         boolean isHealthy = clusterManager.isClusterHealthy();
         assertTrue(isHealthy);
+    }
+
+    @Test
+    void setTaskHistoryLimit() {
+        clusterManager.setTaskHistoryLimit(0);
+        Integer taskHistoryLimit = clusterManager.getTaskHistoryLimit();
+        assertEquals(0, (long) taskHistoryLimit);
+        //set back to default
+        clusterManager.setTaskHistoryLimit(5);
     }
 
 }
