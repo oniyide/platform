@@ -16,18 +16,18 @@
  */
 package org.hobbit.controller.docker;
 
-import org.hobbit.controller.orchestration.ContainerManager;
-import org.hobbit.core.Constants;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.Semaphore;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.concurrent.Semaphore;
+
+import org.hobbit.core.Constants;
 
 /**
  * Created by Timofey Ermilov on 01/09/16.
