@@ -2,7 +2,7 @@ FROM maven
 
 LABEL maintainer="Hobbit Team" \
       name="platform-controller" \
-      version="0.1"
+      version="3.0.1"
 
 RUN mkdir -p /usr/src/app
 # Create an empty metadata directory (it will be used as default by the file-based image manager)
