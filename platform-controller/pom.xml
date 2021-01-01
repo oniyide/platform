@@ -38,22 +38,6 @@
 	</licenses>
 	<inceptionYear>2017</inceptionYear>
 
-	<properties>
-		<fabric8.service.name>${project.artifactId}</fabric8.service.name>
-		<fabric8.service.headless>true</fabric8.service.headless>
-
-		<fabric8.metrics.scrape>true</fabric8.metrics.scrape>
-		<fabric8.metrics.port>9779</fabric8.metrics.port>
-		<fabric8.metrics.scheme>http</fabric8.metrics.scheme>
-	</properties>
-
-	<repositories>
-		<repository>
-			<id>alfresco-public</id>
-			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<!-- Hobbit core -->
 		<dependency>
